@@ -154,6 +154,9 @@ document.addEventListener("click", async (e) => {
         .sort((a, b) => b.idCounter - a.idCounter);
 
       renderTasks(bookMarksList, emptyState, bookmarksParent);
+
+      // render pagination
+      renderPaginationBtns(bookMarksList, pagination);
     }
   }
 
