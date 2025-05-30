@@ -116,7 +116,7 @@ searchDiv.addEventListener("input", (e) => {
   }
 });
 
-document.addEventListener("click", (e) => {
+document.addEventListener("click", async (e) => {
   // render page tasks
   if (e.target.classList.contains("page")) {
     renderPageTasks(
@@ -133,13 +133,28 @@ document.addEventListener("click", (e) => {
 
   // delete bookmark
   if (e.target.classList.contains("delete-btn")) {
-    deleteBookmark(
-      e.target,
-      bookMarksList,
-      pagination,
-      emptyState,
-      bookmarksParent
-    );
+    if (getUserId() === "" || !getUserId())
+      deleteBookmark(
+        e.target,
+        bookMarksList,
+        pagination,
+        emptyState,
+        bookmarksParent
+      );
+    else {
+      let taskId = e.target.closest(".task").id;
+      const docRef = doc(db, "users", getUserId(), "tasks", taskId);
+      await deleteDoc(docRef);
+
+      let returnedData = await getDocs(
+        collection(db, "users", getUserId(), "tasks")
+      );
+      bookMarksList = returnedData.docs
+        .map((task) => task.data())
+        .sort((a, b) => b.idCounter - a.idCounter);
+
+      renderTasks(bookMarksList, emptyState, bookmarksParent);
+    }
   }
 
   // open edit bookmark
