@@ -141,7 +141,8 @@ export async function renderTasks(
   search = false,
   online = false
 ) {
-  if (online) await bookMarksList;
+  // if (online) {}
+  // let requestData = await bookMarksList
 
   if (bookMarksList.length < 1 || bookMarksList.slice(0, 4).length < 1) {
     emptyState.classList.remove("hidden");

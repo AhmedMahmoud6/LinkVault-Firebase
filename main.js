@@ -93,6 +93,7 @@ addBookmark.addEventListener("click", async (_) => {
     if (getUserId() === "" || !getUserId()) {
       createBookmark(taskVal, urlVal, bookMarksList);
       localStorage.setItem("bookmark", JSON.stringify(bookMarksList));
+      renderTasks(bookMarksList, emptyState, bookmarksParent, false);
     } else {
       createBookmarkFirebase(taskVal, urlVal, bookMarksList);
       let returnedData = await getDocs(
@@ -101,9 +102,9 @@ addBookmark.addEventListener("click", async (_) => {
       bookMarksList = returnedData.docs
         .map((task) => task.data())
         .sort((a, b) => b.idCounter - a.idCounter);
+      renderTasks(bookMarksList, emptyState, bookmarksParent, false, true);
     }
 
-    await renderTasks(bookMarksList, emptyState, bookmarksParent, false, true);
     localStorage.setItem(
       "totalpages",
       JSON.stringify(Math.ceil(bookMarksList.length / itemsPerPage))
