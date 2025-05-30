@@ -89,6 +89,7 @@ addBookmark.addEventListener("click", async (_) => {
     addTask.value = ""; // clear title input
     addUrl.value = ""; // clear url input
     searchDiv.querySelector("input").value = ""; // clear search input
+    console.log("yes sir");
 
     if (getUserId() === "" || !getUserId()) {
       createBookmark(taskVal, urlVal, bookMarksList);
