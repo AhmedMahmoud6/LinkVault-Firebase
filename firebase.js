@@ -21,7 +21,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-export { db };
+export { db, auth };
 
 export async function register(email, password) {
   try {
@@ -59,6 +59,7 @@ export async function logout() {
     await signOut(auth);
     console.log("Logged out");
     // Redirect or update UI
+    window.location.reload();
   } catch (error) {
     console.error("Logout Error:", error.message);
   }

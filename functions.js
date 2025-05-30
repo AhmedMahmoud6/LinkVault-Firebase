@@ -1,17 +1,8 @@
 import {
-  getFirestore,
-  collection, // Reference to a collection
   doc, // Reference to a document
-  addDoc, // Add document with auto-generated ID
   setDoc, // Set document with custom ID
   getDoc, // Get a single document
-  getDocs, // Get multiple documents
   updateDoc, // Update a document
-  deleteDoc, // Delete a document
-  query, // Create queries
-  where, // Add where conditions
-  orderBy, // Order results
-  limit, // Limit results
 } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 import { db } from "./firebase.js";
 import { getUserId } from "./user.js";

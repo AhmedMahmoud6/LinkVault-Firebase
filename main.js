@@ -10,21 +10,13 @@ import {
   itemsPerPage,
 } from "./functions.js";
 import {
-  getFirestore,
   collection, // Reference to a collection
   doc, // Reference to a document
-  addDoc, // Add document with auto-generated ID
-  setDoc, // Set document with custom ID
-  getDoc, // Get a single document
   getDocs, // Get multiple documents
   updateDoc, // Update a document
   deleteDoc, // Delete a document
-  query, // Create queries
-  where, // Add where conditions
-  orderBy, // Order results
-  limit, // Limit results
 } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
-import { db } from "./firebase.js";
+import { db, auth, logout } from "./firebase.js";
 import { getUserId } from "./user.js";
 
 let addTask = document.querySelector(".add-title");
@@ -39,6 +31,9 @@ let editTitleInput = document.querySelector(".edit-title");
 let editUrlInput = document.querySelector(".edit-url");
 let updateBookmarkBtn = document.querySelector(".update-bookmark");
 let editingBookmarkId = 0;
+let loginRegisterContainer = document.querySelector(".login-register");
+let userProfile = document.querySelector(".profile");
+let userMenu = document.querySelector(".menu");
 
 let result = [];
 let bookMarksList = [];
@@ -55,6 +50,30 @@ if (getUserId() === "" || !getUserId()) {
     .map((task) => task.data())
     .sort((a, b) => b.idCounter - a.idCounter);
 }
+
+// check if user is logged in
+if (getUserId() === "" || !getUserId()) {
+  loginRegisterContainer.classList.remove("hidden");
+  userProfile.classList.add("hidden");
+} else {
+  userProfile.classList.remove("hidden");
+  loginRegisterContainer.classList.add("hidden");
+  let user = auth.currentUser;
+  document.querySelector(".user-name h1").textContent = user.email;
+}
+
+// display profile menu
+userProfile.addEventListener("click", (_) => {
+  if (userMenu.classList.contains("hidden"))
+    userMenu.classList.remove("hidden");
+  else userMenu.classList.add("hidden");
+});
+
+// logout
+userMenu.addEventListener("click", (_) => {
+  localStorage.setItem("uid", JSON.stringify(""));
+  logout();
+});
 
 renderTasks(bookMarksList, emptyState, bookmarksParent);
 

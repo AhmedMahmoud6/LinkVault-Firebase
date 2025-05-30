@@ -35,10 +35,16 @@
         />
         <button
           type="button"
-          class="login-btn text-white w-full bg-[#059669] cursor-pointer hover:bg-[#f2873c] focus:ring-3 focus:ring-[#ff9246] font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
+          class="login-btn text-white w-full bg-[#059669] cursor-pointer hover:bg-[#1dc28f] focus:ring-3 focus:ring-[#03e8a1] font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
         >
           Login
         </button>
+        <div class="login-failed hidden">
+          <p class="text-lg text-red-500 font-bold">Wrong email or password</p>
+        </div>
+        <div class="login-success hidden">
+          <p class="text-lg text-green-500 font-bold">Logged in successfully</p>
+        </div>
         <div>
           <span class="text-white">Don't Have an account?</span>
           <a href="register.html" class="text-[#f97316]">Register Here</a>
