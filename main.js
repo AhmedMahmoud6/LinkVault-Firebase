@@ -43,7 +43,7 @@ let editingBookmarkId = 0;
 let result = [];
 let bookMarksList = [];
 
-if (getUserId() === "") {
+if (getUserId() === "" || !getUserId()) {
   JSON.parse(localStorage.getItem("bookmark"))
     ? (bookMarksList = JSON.parse(localStorage.getItem("bookmark")))
     : localStorage.setItem("bookmark", JSON.stringify(bookMarksList));
@@ -70,7 +70,7 @@ addBookmark.addEventListener("click", async (_) => {
     addUrl.value = ""; // clear url input
     searchDiv.querySelector("input").value = ""; // clear search input
 
-    if (getUserId() === "") {
+    if (getUserId() === "" || !getUserId()) {
       createBookmark(taskVal, urlVal, bookMarksList);
       localStorage.setItem("bookmark", JSON.stringify(bookMarksList));
     } else {
@@ -162,7 +162,7 @@ document.addEventListener("click", (e) => {
 });
 
 // edit bookmark
-updateBookmarkBtn.addEventListener("click", (_) => {
+updateBookmarkBtn.addEventListener("click", async (_) => {
   let taskVal = editTitleInput.value.trim();
   let urlVal = editUrlInput.value.trim();
   if (
@@ -176,13 +176,35 @@ updateBookmarkBtn.addEventListener("click", (_) => {
   ) {
     for (let bookmark of bookMarksList)
       if (bookmark.idCounter === editingBookmarkId) {
-        bookmark.taskVal = taskVal;
-        bookmark.urlVal = urlVal;
-        localStorage.setItem("bookmark", JSON.stringify(bookMarksList));
+        if (getUserId() === "" || !getUserId()) {
+          bookmark.taskVal = taskVal;
+          bookmark.urlVal = urlVal;
+          localStorage.setItem("bookmark", JSON.stringify(bookMarksList));
+        } else {
+          const docRef = doc(
+            db,
+            "users",
+            getUserId(),
+            "tasks",
+            `${editingBookmarkId}`
+          );
+
+          await updateDoc(docRef, {
+            taskVal: taskVal,
+            urlVal: urlVal,
+          });
+
+          let returnedData = await getDocs(
+            collection(db, "users", getUserId(), "tasks")
+          );
+          bookMarksList = returnedData.docs
+            .map((task) => task.data())
+            .sort((a, b) => b.idCounter - a.idCounter);
+        }
         break;
       }
     renderPageTasks(
-      currentPage,
+      JSON.parse(localStorage.getItem("currentpage")),
       result.length === 0 ? bookMarksList : result,
       emptyState,
       bookmarksParent

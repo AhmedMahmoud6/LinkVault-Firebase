@@ -23,6 +23,8 @@ let endPoint = 4;
 let tempStartPoint;
 let tempEndPoint;
 
+localStorage.setItem("currentpage", JSON.stringify(currentPage));
+
 let totalPages;
 export let itemsPerPage = 4;
 
@@ -244,6 +246,8 @@ export function renderPageTasks(
   bookmarksParent
 ) {
   currentPage = Number(clickedPage);
+  localStorage.setItem("currentpage", JSON.stringify(currentPage));
+
   startPoint = (currentPage - 1) * itemsPerPage;
   endPoint = startPoint + itemsPerPage;
   renderTasks(renderedList, emptyState, bookmarksParent);
