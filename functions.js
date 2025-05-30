@@ -81,19 +81,26 @@ export function validateForm(taskVal, urlVal, addBookmark, titleDiv, urlDiv) {
 export async function createBookmarkFirebase(taskVal, urlVal, bookMarksList) {
   let currDoc = doc(db, "users", getUserId());
   let getCurrDoc = await getDoc(currDoc);
-  console.log(getCurrDoc);
   let currentCounter = getCurrDoc.data().idCounter || 0;
   let newTaskId = currentCounter + 1;
 
   try {
     // add new task in the subcollection (tasks)
-    const docRef = await addDoc(collection(db, "users", getUserId(), "tasks"), {
+    const taskDocRef = doc(
+      db,
+      "users",
+      getUserId(),
+      "tasks",
+      `task-${newTaskId}`
+    );
+
+    const docRef = await setDoc(taskDocRef, {
       taskVal: taskVal,
       urlVal: urlVal,
       idCounter: newTaskId,
     });
 
-    let newTask = await getDoc(docRef);
+    let newTask = await getDoc(taskDocRef);
 
     bookMarksList.unshift(newTask.data());
 
@@ -118,7 +125,7 @@ export function createBookmark(taskVal, urlVal, bookMarksList) {
   localStorage.setItem("bookmark", JSON.stringify(bookMarksList));
 }
 
-export function deleteBookmark(delBtn, bookMarksList, pagination) {
+export function deleteBookmark(delBtn, bookMarksList, pagination, emptyState) {
   let currBookmark = delBtn.closest(".task");
   for (let i = 0; i < bookMarksList.length; i++) {
     if (bookMarksList[i].idCounter == currBookmark.id) {
@@ -127,7 +134,7 @@ export function deleteBookmark(delBtn, bookMarksList, pagination) {
     }
   }
   localStorage.setItem("bookmark", JSON.stringify(bookMarksList));
-  renderPageTasks(currentPage, bookMarksList);
+  renderPageTasks(currentPage, bookMarksList, emptyState);
   renderPaginationBtns(
     JSON.parse(localStorage.getItem("bookmark")),
     pagination
@@ -230,7 +237,7 @@ export function searchBookmark(string, userInput) {
   return false;
 }
 
-export function renderPageTasks(clickedPage, renderedList) {
+export function renderPageTasks(clickedPage, renderedList, emptyState) {
   currentPage = Number(clickedPage);
   startPoint = (currentPage - 1) * itemsPerPage;
   endPoint = startPoint + itemsPerPage;

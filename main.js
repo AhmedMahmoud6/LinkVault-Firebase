@@ -51,7 +51,7 @@ if (getUserId() === "") {
   let returnedData = await getDocs(
     collection(db, "users", getUserId(), "tasks")
   );
-  bookMarksList = returnedData.docs.map((task) => task.data());
+  bookMarksList = returnedData.docs.map((task) => task.data()).reverse();
 }
 
 renderTasks(bookMarksList, emptyState, bookmarksParent);
@@ -60,7 +60,7 @@ renderTasks(bookMarksList, emptyState, bookmarksParent);
 renderPaginationBtns(bookMarksList, pagination);
 
 // add bookmark
-addBookmark.addEventListener("click", (_) => {
+addBookmark.addEventListener("click", async (_) => {
   let taskVal = addTask.value.trim();
   let urlVal = addUrl.value.trim();
   if (validateForm(taskVal, urlVal, addBookmark, addTask, addUrl)) {
@@ -73,9 +73,13 @@ addBookmark.addEventListener("click", (_) => {
       localStorage.setItem("bookmark", JSON.stringify(bookMarksList));
     } else {
       createBookmarkFirebase(taskVal, urlVal, bookMarksList);
+      let returnedData = await getDocs(
+        collection(db, "users", getUserId(), "tasks")
+      );
+      bookMarksList = returnedData.docs.map((task) => task.data()).reverse();
     }
-    totalPages = Math.ceil(bookMarksList.length / itemsPerPage); // update total pages counter
     renderTasks(bookMarksList, emptyState, bookmarksParent, false);
+    totalPages = Math.ceil(bookMarksList.length / itemsPerPage); // update total pages counter
 
     // render pagination
     renderPaginationBtns(bookMarksList, pagination);
@@ -110,7 +114,8 @@ document.addEventListener("click", (e) => {
   if (e.target.classList.contains("page")) {
     renderPageTasks(
       e.target.innerText,
-      result.length === 0 ? bookMarksList : result
+      result.length === 0 ? bookMarksList : result,
+      emptyState
     );
     renderPaginationBtns(
       result.length === 0 ? bookMarksList : result,
@@ -120,7 +125,7 @@ document.addEventListener("click", (e) => {
 
   // delete bookmark
   if (e.target.classList.contains("delete-btn")) {
-    deleteBookmark(e.target, bookMarksList, pagination);
+    deleteBookmark(e.target, bookMarksList, pagination, emptyState);
   }
 
   // open edit bookmark
@@ -162,7 +167,11 @@ updateBookmarkBtn.addEventListener("click", (_) => {
         localStorage.setItem("bookmark", JSON.stringify(bookMarksList));
         break;
       }
-    renderPageTasks(currentPage, result.length === 0 ? bookMarksList : result);
+    renderPageTasks(
+      currentPage,
+      result.length === 0 ? bookMarksList : result,
+      emptyState
+    );
     editContainer.classList.add("hidden");
   }
 });
