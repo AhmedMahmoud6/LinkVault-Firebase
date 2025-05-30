@@ -1,4 +1,4 @@
-import { login } from "./firebase.js";
+import { login, getFriendlyErrorMessage } from "./firebase.js";
 import { setUserId } from "./user.js";
 
 let emailInput = document.querySelector(".user-title");
@@ -17,6 +17,9 @@ loginBtn.addEventListener("click", async (_) => {
       window.location.replace("index.html");
     }, 1000);
   } else {
+    loginFailed.querySelector("p").textContent = getFriendlyErrorMessage(
+      result.error
+    );
     loginFailed.classList.remove("hidden");
     loginSuccess.classList.add("hidden");
   }

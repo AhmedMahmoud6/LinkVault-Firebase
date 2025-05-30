@@ -1,4 +1,4 @@
-import { register, db } from "./firebase.js";
+import { register, db, getFriendlyErrorMessage } from "./firebase.js";
 import {
   doc,
   setDoc,
@@ -22,6 +22,9 @@ registerBtn.addEventListener("click", async (_) => {
       window.location.replace("login.html");
     }, 1000);
   } else {
+    registerFailed.querySelector("p").textContent = getFriendlyErrorMessage(
+      result.error
+    );
     registerFailed.classList.remove("hidden");
     registerSuccess.classList.add("hidden");
   }

@@ -35,7 +35,7 @@ export async function register(email, password) {
     return { success: true, user: userCredential.user };
   } catch (error) {
     console.error("Registration Error:", error.message);
-    return { success: false, error: error.message };
+    return { success: false, error: error.code };
   }
 }
 
@@ -49,8 +49,8 @@ export async function login(email, password) {
     console.log("Logged in:", userCredential.user.email);
     return { success: true, user: userCredential.user };
   } catch (error) {
-    console.error("Login Error:", error.message);
-    return { success: false, error: error.message };
+    console.error("Login Error:", error.code);
+    return { success: false, error: error.code };
   }
 }
 
@@ -63,4 +63,21 @@ export async function logout() {
   } catch (error) {
     console.error("Logout Error:", error.message);
   }
+}
+
+export function getFriendlyErrorMessage(error) {
+  if (!error) return "Something went wrong. Please try again.";
+
+  const map = {
+    "auth/email-already-in-use": "This email is already in use.",
+    "auth/invalid-email": "Please enter a valid email address.",
+    "auth/weak-password": "Password should be at least 6 characters.",
+    "auth/missing-password": "Please enter a password.",
+    "auth/user-not-found": "No account found with this email.",
+    "auth/invalid-credential": "Incorrect Email or password. Please try again.",
+    "auth/too-many-requests":
+      "Too many attempts. Please wait a moment and try again.",
+  };
+
+  return map[error] || "An unknown error occurred.";
 }
