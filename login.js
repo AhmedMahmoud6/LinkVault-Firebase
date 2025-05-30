@@ -15,7 +15,7 @@ loginBtn.addEventListener("click", async (_) => {
     loginFailed.classList.add("hidden");
     setTimeout(() => {
       window.location.replace("index.html");
-    }, 2000);
+    }, 1000);
   } else {
     loginFailed.classList.remove("hidden");
     loginSuccess.classList.add("hidden");

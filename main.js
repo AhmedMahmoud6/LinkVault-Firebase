@@ -89,7 +89,6 @@ addBookmark.addEventListener("click", async (_) => {
     addTask.value = ""; // clear title input
     addUrl.value = ""; // clear url input
     searchDiv.querySelector("input").value = ""; // clear search input
-    console.log("yes sir");
 
     if (getUserId() === "" || !getUserId()) {
       createBookmark(taskVal, urlVal, bookMarksList);
@@ -103,9 +102,8 @@ addBookmark.addEventListener("click", async (_) => {
         .map((task) => task.data())
         .sort((a, b) => b.idCounter - a.idCounter);
     }
-    console.log("yes passed");
-    console.log(bookMarksList);
-    renderTasks(bookMarksList, emptyState, bookmarksParent, false);
+
+    renderTasks(bookMarksList, emptyState, bookmarksParent, false, true);
     localStorage.setItem(
       "totalpages",
       JSON.stringify(Math.ceil(bookMarksList.length / itemsPerPage))

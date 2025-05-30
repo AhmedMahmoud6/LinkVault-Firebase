@@ -20,7 +20,7 @@ registerBtn.addEventListener("click", async (_) => {
     registerFailed.classList.add("hidden");
     setTimeout(() => {
       window.location.replace("login.html");
-    }, 2000);
+    }, 1000);
   } else {
     registerFailed.classList.remove("hidden");
     registerSuccess.classList.add("hidden");

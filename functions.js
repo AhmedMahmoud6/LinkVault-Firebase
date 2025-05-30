@@ -134,12 +134,15 @@ export function deleteBookmark(
   );
 }
 
-export function renderTasks(
+export async function renderTasks(
   bookMarksList,
   emptyState,
   bookmarksParent,
-  search = false
+  search = false,
+  online = false
 ) {
+  if (online) await bookMarksList;
+
   if (bookMarksList.length < 1 || bookMarksList.slice(0, 4).length < 1) {
     emptyState.classList.remove("hidden");
     bookmarksParent.classList.add("hidden");
