@@ -125,7 +125,13 @@ export function createBookmark(taskVal, urlVal, bookMarksList) {
   localStorage.setItem("bookmark", JSON.stringify(bookMarksList));
 }
 
-export function deleteBookmark(delBtn, bookMarksList, pagination, emptyState) {
+export function deleteBookmark(
+  delBtn,
+  bookMarksList,
+  pagination,
+  emptyState,
+  bookmarksParent
+) {
   let currBookmark = delBtn.closest(".task");
   for (let i = 0; i < bookMarksList.length; i++) {
     if (bookMarksList[i].idCounter == currBookmark.id) {
@@ -134,7 +140,7 @@ export function deleteBookmark(delBtn, bookMarksList, pagination, emptyState) {
     }
   }
   localStorage.setItem("bookmark", JSON.stringify(bookMarksList));
-  renderPageTasks(currentPage, bookMarksList, emptyState);
+  renderPageTasks(currentPage, bookMarksList, emptyState, bookmarksParent);
   renderPaginationBtns(
     JSON.parse(localStorage.getItem("bookmark")),
     pagination
@@ -237,7 +243,12 @@ export function searchBookmark(string, userInput) {
   return false;
 }
 
-export function renderPageTasks(clickedPage, renderedList, emptyState) {
+export function renderPageTasks(
+  clickedPage,
+  renderedList,
+  emptyState,
+  bookmarksParent
+) {
   currentPage = Number(clickedPage);
   startPoint = (currentPage - 1) * itemsPerPage;
   endPoint = startPoint + itemsPerPage;
@@ -246,6 +257,7 @@ export function renderPageTasks(clickedPage, renderedList, emptyState) {
 
 export function renderPaginationBtns(bookMarksList, pagination) {
   totalPages = Math.ceil(bookMarksList.length / itemsPerPage);
+  localStorage.setItem("totalpages", JSON.stringify(totalPages));
 
   pagination.innerHTML = "";
 

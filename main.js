@@ -79,7 +79,10 @@ addBookmark.addEventListener("click", async (_) => {
       bookMarksList = returnedData.docs.map((task) => task.data()).reverse();
     }
     renderTasks(bookMarksList, emptyState, bookmarksParent, false);
-    totalPages = Math.ceil(bookMarksList.length / itemsPerPage); // update total pages counter
+    localStorage.setItem(
+      "totalpages",
+      JSON.stringify(Math.ceil(bookMarksList.length / itemsPerPage))
+    ); // update total pages counter
 
     // render pagination
     renderPaginationBtns(bookMarksList, pagination);
@@ -115,7 +118,8 @@ document.addEventListener("click", (e) => {
     renderPageTasks(
       e.target.innerText,
       result.length === 0 ? bookMarksList : result,
-      emptyState
+      emptyState,
+      bookmarksParent
     );
     renderPaginationBtns(
       result.length === 0 ? bookMarksList : result,
@@ -125,7 +129,13 @@ document.addEventListener("click", (e) => {
 
   // delete bookmark
   if (e.target.classList.contains("delete-btn")) {
-    deleteBookmark(e.target, bookMarksList, pagination, emptyState);
+    deleteBookmark(
+      e.target,
+      bookMarksList,
+      pagination,
+      emptyState,
+      bookmarksParent
+    );
   }
 
   // open edit bookmark
@@ -170,7 +180,8 @@ updateBookmarkBtn.addEventListener("click", (_) => {
     renderPageTasks(
       currentPage,
       result.length === 0 ? bookMarksList : result,
-      emptyState
+      emptyState,
+      bookmarksParent
     );
     editContainer.classList.add("hidden");
   }
