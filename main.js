@@ -84,6 +84,7 @@ renderPaginationBtns(bookMarksList, pagination);
 addBookmark.addEventListener("click", async (_) => {
   let taskVal = addTask.value.trim();
   let urlVal = addUrl.value.trim();
+
   if (validateForm(taskVal, urlVal, addBookmark, addTask, addUrl)) {
     addTask.value = ""; // clear title input
     addUrl.value = ""; // clear url input
@@ -101,6 +102,8 @@ addBookmark.addEventListener("click", async (_) => {
         .map((task) => task.data())
         .sort((a, b) => b.idCounter - a.idCounter);
     }
+    console.log("yes passed");
+    console.log(bookMarksList);
     renderTasks(bookMarksList, emptyState, bookmarksParent, false);
     localStorage.setItem(
       "totalpages",
