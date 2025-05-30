@@ -103,7 +103,7 @@ addBookmark.addEventListener("click", async (_) => {
         .sort((a, b) => b.idCounter - a.idCounter);
     }
 
-    renderTasks(bookMarksList, emptyState, bookmarksParent, false, true);
+    await renderTasks(bookMarksList, emptyState, bookmarksParent, false, true);
     localStorage.setItem(
       "totalpages",
       JSON.stringify(Math.ceil(bookMarksList.length / itemsPerPage))
