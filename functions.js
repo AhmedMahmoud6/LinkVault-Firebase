@@ -86,13 +86,7 @@ export async function createBookmarkFirebase(taskVal, urlVal, bookMarksList) {
 
   try {
     // add new task in the subcollection (tasks)
-    const taskDocRef = doc(
-      db,
-      "users",
-      getUserId(),
-      "tasks",
-      `task-${newTaskId}`
-    );
+    const taskDocRef = doc(db, "users", getUserId(), "tasks", `${newTaskId}`);
 
     const docRef = await setDoc(taskDocRef, {
       taskVal: taskVal,

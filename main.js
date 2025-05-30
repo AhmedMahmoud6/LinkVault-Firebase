@@ -51,7 +51,9 @@ if (getUserId() === "") {
   let returnedData = await getDocs(
     collection(db, "users", getUserId(), "tasks")
   );
-  bookMarksList = returnedData.docs.map((task) => task.data()).reverse();
+  bookMarksList = returnedData.docs
+    .map((task) => task.data())
+    .sort((a, b) => b.idCounter - a.idCounter);
 }
 
 renderTasks(bookMarksList, emptyState, bookmarksParent);
@@ -76,7 +78,9 @@ addBookmark.addEventListener("click", async (_) => {
       let returnedData = await getDocs(
         collection(db, "users", getUserId(), "tasks")
       );
-      bookMarksList = returnedData.docs.map((task) => task.data()).reverse();
+      bookMarksList = returnedData.docs
+        .map((task) => task.data())
+        .sort((a, b) => b.idCounter - a.idCounter);
     }
     renderTasks(bookMarksList, emptyState, bookmarksParent, false);
     localStorage.setItem(
