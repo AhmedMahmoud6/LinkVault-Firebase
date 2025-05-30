@@ -5,6 +5,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCJ5D60YYSDLU5t4F85E2hAGwJtZJdIf6U",
@@ -18,6 +19,9 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
+
+export { db };
 
 export async function register(email, password) {
   try {
@@ -28,9 +32,10 @@ export async function register(email, password) {
     );
     console.log("Registered:", userCredential.user.email);
 
-    return userCredential;
+    return { success: true, user: userCredential.user };
   } catch (error) {
     console.error("Registration Error:", error.message);
+    return { success: false, error: error.message };
   }
 }
 
@@ -42,9 +47,10 @@ export async function login(email, password) {
       password
     );
     console.log("Logged in:", userCredential.user.email);
-    return userCredential;
+    return { success: true, user: userCredential.user };
   } catch (error) {
     console.error("Login Error:", error.message);
+    return { success: false, error: error.message };
   }
 }
 

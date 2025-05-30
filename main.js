@@ -1,3 +1,32 @@
+import {
+  validateForm,
+  createBookmark,
+  createBookmarkFirebase,
+  deleteBookmark,
+  renderTasks,
+  searchBookmark,
+  renderPageTasks,
+  renderPaginationBtns,
+  itemsPerPage,
+} from "./functions.js";
+import {
+  getFirestore,
+  collection, // Reference to a collection
+  doc, // Reference to a document
+  addDoc, // Add document with auto-generated ID
+  setDoc, // Set document with custom ID
+  getDoc, // Get a single document
+  getDocs, // Get multiple documents
+  updateDoc, // Update a document
+  deleteDoc, // Delete a document
+  query, // Create queries
+  where, // Add where conditions
+  orderBy, // Order results
+  limit, // Limit results
+} from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+import { db } from "./firebase.js";
+import { getUserId } from "./user.js";
+
 let addTask = document.querySelector(".add-title");
 let addUrl = document.querySelector(".add-url");
 let addBookmark = document.querySelector(".add-btn");
@@ -13,9 +42,17 @@ let editingBookmarkId = 0;
 
 let result = [];
 let bookMarksList = [];
-JSON.parse(localStorage.getItem("bookmark"))
-  ? (bookMarksList = JSON.parse(localStorage.getItem("bookmark")))
-  : localStorage.setItem("bookmark", JSON.stringify(bookMarksList));
+
+if (getUserId() === "") {
+  JSON.parse(localStorage.getItem("bookmark"))
+    ? (bookMarksList = JSON.parse(localStorage.getItem("bookmark")))
+    : localStorage.setItem("bookmark", JSON.stringify(bookMarksList));
+} else {
+  let returnedData = await getDocs(
+    collection(db, "users", getUserId(), "tasks")
+  );
+  bookMarksList = returnedData.docs.map((task) => task.data());
+}
 
 renderTasks(bookMarksList, emptyState, bookmarksParent);
 
@@ -31,8 +68,12 @@ addBookmark.addEventListener("click", (_) => {
     addUrl.value = ""; // clear url input
     searchDiv.querySelector("input").value = ""; // clear search input
 
-    createBookmark(taskVal, urlVal, bookMarksList);
-    localStorage.setItem("bookmark", JSON.stringify(bookMarksList));
+    if (getUserId() === "") {
+      createBookmark(taskVal, urlVal, bookMarksList);
+      localStorage.setItem("bookmark", JSON.stringify(bookMarksList));
+    } else {
+      createBookmarkFirebase(taskVal, urlVal, bookMarksList);
+    }
     totalPages = Math.ceil(bookMarksList.length / itemsPerPage); // update total pages counter
     renderTasks(bookMarksList, emptyState, bookmarksParent, false);
 

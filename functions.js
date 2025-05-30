@@ -1,3 +1,21 @@
+import {
+  getFirestore,
+  collection, // Reference to a collection
+  doc, // Reference to a document
+  addDoc, // Add document with auto-generated ID
+  setDoc, // Set document with custom ID
+  getDoc, // Get a single document
+  getDocs, // Get multiple documents
+  updateDoc, // Update a document
+  deleteDoc, // Delete a document
+  query, // Create queries
+  where, // Add where conditions
+  orderBy, // Order results
+  limit, // Limit results
+} from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+import { db } from "./firebase.js";
+import { getUserId } from "./user.js";
+
 let idCounter = 0; // id counter
 let currentPage = 1;
 let startPoint = 0;
@@ -6,9 +24,9 @@ let tempStartPoint;
 let tempEndPoint;
 
 let totalPages;
-let itemsPerPage = 4;
+export let itemsPerPage = 4;
 
-function validateForm(taskVal, urlVal, addBookmark, titleDiv, urlDiv) {
+export function validateForm(taskVal, urlVal, addBookmark, titleDiv, urlDiv) {
   let existingError = document.querySelector(".err");
 
   // regex for real links
@@ -60,7 +78,35 @@ function validateForm(taskVal, urlVal, addBookmark, titleDiv, urlDiv) {
   return false;
 }
 
-function createBookmark(taskVal, urlVal, bookMarksList) {
+export async function createBookmarkFirebase(taskVal, urlVal, bookMarksList) {
+  let currDoc = doc(db, "users", getUserId());
+  let getCurrDoc = await getDoc(currDoc);
+  console.log(getCurrDoc);
+  let currentCounter = getCurrDoc.data().idCounter || 0;
+  let newTaskId = currentCounter + 1;
+
+  try {
+    // add new task in the subcollection (tasks)
+    const docRef = await addDoc(collection(db, "users", getUserId(), "tasks"), {
+      taskVal: taskVal,
+      urlVal: urlVal,
+      idCounter: newTaskId,
+    });
+
+    let newTask = await getDoc(docRef);
+
+    bookMarksList.unshift(newTask.data());
+
+    // update idCounter value in firestore
+    await updateDoc(currDoc, {
+      idCounter: newTaskId,
+    });
+  } catch (error) {
+    console.error("Error creating subcollection: ", error);
+  }
+}
+
+export function createBookmark(taskVal, urlVal, bookMarksList) {
   idCounter += 1;
   let bookmark = {
     taskVal,
@@ -72,7 +118,7 @@ function createBookmark(taskVal, urlVal, bookMarksList) {
   localStorage.setItem("bookmark", JSON.stringify(bookMarksList));
 }
 
-function deleteBookmark(delBtn, bookMarksList, pagination) {
+export function deleteBookmark(delBtn, bookMarksList, pagination) {
   let currBookmark = delBtn.closest(".task");
   for (let i = 0; i < bookMarksList.length; i++) {
     if (bookMarksList[i].idCounter == currBookmark.id) {
@@ -88,7 +134,7 @@ function deleteBookmark(delBtn, bookMarksList, pagination) {
   );
 }
 
-function renderTasks(
+export function renderTasks(
   bookMarksList,
   emptyState,
   bookmarksParent,
@@ -173,7 +219,7 @@ function createErrMsg(existingError, errMsg, addBookmark) {
   return validationMsg;
 }
 
-function searchBookmark(string, userInput) {
+export function searchBookmark(string, userInput) {
   let i = 0;
 
   for (let char of string) {
@@ -184,14 +230,14 @@ function searchBookmark(string, userInput) {
   return false;
 }
 
-function renderPageTasks(clickedPage, renderedList) {
+export function renderPageTasks(clickedPage, renderedList) {
   currentPage = Number(clickedPage);
   startPoint = (currentPage - 1) * itemsPerPage;
   endPoint = startPoint + itemsPerPage;
   renderTasks(renderedList, emptyState, bookmarksParent);
 }
 
-function renderPaginationBtns(bookMarksList, pagination) {
+export function renderPaginationBtns(bookMarksList, pagination) {
   totalPages = Math.ceil(bookMarksList.length / itemsPerPage);
 
   pagination.innerHTML = "";
