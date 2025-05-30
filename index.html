@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Link Vault</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+  <body class="bg-[#0f172a]">
+    <div class="parent h-fit flex flex-col gap-3 items-center py-9">
+      <div
+        class="top-side flex justify-between items-center w-9/12 max-[768px]:w-11/12 max-[550px]:w-full gap-4 p-3"
+      >
+        <div class="text-title text-center">
+          <h1 class="text-[#f97316] font-bold text-4xl">LinkVault</h1>
+          <p class="text-white mb-4">Your personal bookmark manager</p>
+        </div>
+
+        <div class="login-register flex flex-col sm:flex-row gap-3">
+          <a
+            href="login.html"
+            class="text-center text-white sm:w-36 bg-[#059669] cursor-pointer hover:bg-[#1dc28f] focus:ring-3 focus:ring-[#03e8a1] font-medium rounded-lg text-sm px-5 py-2.5 sm:mx-3"
+          >
+            Login
+          </a>
+          <a
+            href="register.html"
+            class="text-center text-white sm:w-36 outline-2 outline-[#f97316] cursor-pointer hover:bg-[#f2873c] focus:outline-3 focus:outline-[#f7a56c] font-medium rounded-lg text-sm px-5 py-2.5"
+          >
+            Register
+          </a>
+        </div>
+      </div>
+
+      <div
+        class="vault bg-[#1c2739] w-9/12 outline-2 outline-[#323f52] rounded p-12 flex flex-col gap-7 max-[768px]:w-11/12 max-[550px]:p-3 max-[550px]:w-full"
+      >
+        <div class="add bg-[#059669] w-full rounded p-8">
+          <h1 class="text-white font-bold text-3xl mb-4 max-[550px]:text-xl">
+            Add New Bookmark
+          </h1>
+          <div class="details flex flex-col gap-3">
+            <span class="text-white">Title</span>
+            <input
+              type="text"
+              class="add-title bg-white p-2 rounded outline-none mb-1"
+              placeholder="Enter Bookmark Title"
+              autofocus
+            />
+            <span class="text-white">URL</span>
+            <input
+              type="text"
+              class="add-url bg-white p-2 rounded outline-none mb-5"
+              placeholder="https://example.com"
+            />
+            <button
+              type="button"
+              class="add-btn text-white w-36 bg-[#f97316] cursor-pointer hover:bg-[#f2873c] focus:ring-3 focus:ring-[#ff9246] font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
+            >
+              Add Bookmark
+            </button>
+          </div>
+        </div>
+
+        <div
+          class="search bg-[#1e293a] outline-2 outline-[#333f52] flex justify-between items-center h-12 rounded px-3"
+        >
+          <input
+            type="text"
+            class="placeholder-[#6e819e] outline-none text-white w-full h-full"
+            placeholder="Search Bookmarks..."
+          />
+          <i class="fa-solid fa-magnifying-glass text-[#6e819e]"></i>
+        </div>
+        <div
+          class="bookmarks hidden grid grid-cols-2 max-[1200px]:grid-cols-1 gap-4"
+        ></div>
+
+        <div
+          class="empty-state hidden text-center flex flex-col items-center w-full my-10"
+        >
+          <i class="fa-solid fa-bookmark text-6xl text-[#8b4d27] mb-4"></i>
+          <h3 class="text-[#e2e8f0] font-bold mb-2 text-2xl">
+            No bookmarks found
+          </h3>
+          <p class="text-[#5d6c83]">Try adjusting your search or filters</p>
+        </div>
+
+        <div
+          class="pagination hidden flex gap-4 max-[550px]:gap-3 justify-center"
+        ></div>
+      </div>
+    </div>
+
+    <div
+      class="edit-container hidden fixed top-0 h-screen w-screen bg-black/50 flex justify-center items-center"
+    >
+      <div class="edit-card w-200 bg-[#1c2739] p-12 rounded-lg">
+        <h1 class="text-white font-bold text-3xl mb-4 max-[550px]:text-xl">
+          Edit Bookmark
+        </h1>
+        <div class="details flex flex-col gap-3">
+          <span class="text-white">Title</span>
+          <input
+            type="text"
+            class="edit-title bg-white p-2 rounded outline-none mb-1"
+            placeholder="Enter Bookmark Title"
+            autofocus
+          />
+          <span class="text-white">URL</span>
+          <input
+            type="text"
+            class="edit-url bg-white p-2 rounded outline-none mb-5"
+            placeholder="https://example.com"
+          />
+          <button
+            type="button"
+            class="update-bookmark text-white w-fit bg-[#fbbf24] cursor-pointer hover:bg-[#f8d066] focus:ring-3 focus:ring-[#d49901] font-medium rounded-lg text-sm px-5 py-2.5"
+          >
+            Update Bookmark
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="functions.js"></script>
+    <script src="main.js"></script>
+  </body>
+</html>
