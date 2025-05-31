@@ -3,6 +3,7 @@ import {
   db,
   getFriendlyErrorMessage,
   loginWithGoogle,
+  loginWithGoogleRedirect,
 } from "./firebase.js";
 import {
   doc,
@@ -38,6 +39,7 @@ registerBtn.addEventListener("click", async (_) => {
 });
 
 continueWithGoogle.addEventListener("click", async (_) => {
+  loginWithGoogleRedirect();
   let result = await loginWithGoogle();
 
   if (result.success) {

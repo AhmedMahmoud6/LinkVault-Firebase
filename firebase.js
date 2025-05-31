@@ -2,7 +2,8 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebas
 import {
   getAuth,
   GoogleAuthProvider,
-  signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
@@ -68,9 +69,13 @@ export async function logout() {
   }
 }
 
+export function loginWithGoogleRedirect() {
+  signInWithRedirect(auth, googleProvider);
+}
+
 export async function loginWithGoogle() {
   try {
-    const result = await signInWithPopup(auth, googleProvider);
+    const result = await getRedirectResult(auth);
     const user = result.user;
     console.log("Google User:", user);
     return { success: true, user };
