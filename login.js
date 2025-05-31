@@ -34,25 +34,25 @@ loginBtn.addEventListener("click", async (_) => {
 
 continueWithGoogle.addEventListener("click", async (_) => {
   loginWithGoogleRedirect();
-  let result = await loginWithGoogle();
-
-  console.log(result);
-
-  if (result.success) {
-    const uid = result.user.uid;
-    await setDoc(doc(db, "users", uid), { idCounter: 0 });
-    setUserId(uid);
-
-    loginSuccess.classList.remove("hidden");
-    loginFailed.classList.add("hidden");
-    setTimeout(() => {
-      window.location.replace("index.html");
-    }, 1000);
-  } else {
-    loginFailed.querySelector("p").textContent = getFriendlyErrorMessage(
-      result.error
-    );
-    loginFailed.classList.remove("hidden");
-    loginSuccess.classList.add("hidden");
-  }
 });
+let result = await loginWithGoogle();
+
+console.log(result);
+
+if (result.success) {
+  const uid = result.user.uid;
+  await setDoc(doc(db, "users", uid), { idCounter: 0 });
+  setUserId(uid);
+
+  loginSuccess.classList.remove("hidden");
+  loginFailed.classList.add("hidden");
+  setTimeout(() => {
+    window.location.replace("index.html");
+  }, 1000);
+} else {
+  loginFailed.querySelector("p").textContent = getFriendlyErrorMessage(
+    result.error
+  );
+  loginFailed.classList.remove("hidden");
+  loginSuccess.classList.add("hidden");
+}
