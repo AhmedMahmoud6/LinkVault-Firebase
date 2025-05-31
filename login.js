@@ -36,6 +36,8 @@ continueWithGoogle.addEventListener("click", async (_) => {
   loginWithGoogleRedirect();
   let result = await loginWithGoogle();
 
+  console.log(result);
+
   if (result.success) {
     const uid = result.user.uid;
     await setDoc(doc(db, "users", uid), { idCounter: 0 });
