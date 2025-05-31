@@ -74,6 +74,7 @@ export function validateForm(taskVal, urlVal, addBookmark, titleDiv, urlDiv) {
 export async function createBookmarkFirebase(taskVal, urlVal, bookMarksList) {
   let currDoc = doc(db, "users", getUserId());
   let getCurrDoc = await getDoc(currDoc);
+
   let currentCounter = getCurrDoc.data().idCounter || 0;
   let newTaskId = currentCounter + 1;
 

@@ -1,6 +1,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
 import {
   getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
@@ -20,8 +22,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const googleProvider = new GoogleAuthProvider();
 
-export { db, auth };
+export { db, auth, googleProvider };
 
 export async function register(email, password) {
   try {
@@ -62,6 +65,18 @@ export async function logout() {
     window.location.reload();
   } catch (error) {
     console.error("Logout Error:", error.message);
+  }
+}
+
+export async function loginWithGoogle() {
+  try {
+    const result = await signInWithPopup(auth, googleProvider);
+    const user = result.user;
+    console.log("Google User:", user);
+    return { success: true, user };
+  } catch (error) {
+    console.error("Google Login Error:", error.code, error.message);
+    return { success: false, error: error.code };
   }
 }
 
