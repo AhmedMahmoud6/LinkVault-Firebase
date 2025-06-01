@@ -42,24 +42,26 @@ continueWithGoogle.addEventListener("click", async (_) => {
   loginWithGoogleRedirect();
 });
 
-let result = await loginWithGoogle();
+async () => {
+  let result = await loginWithGoogle();
 
-console.log(result);
+  console.log(result);
 
-if (result.success) {
-  const uid = result.user.uid;
-  await setDoc(doc(db, "users", uid), { idCounter: 0 });
-  setUserId(uid);
+  if (result.success) {
+    const uid = result.user.uid;
+    await setDoc(doc(db, "users", uid), { idCounter: 0 });
+    setUserId(uid);
 
-  registerSuccess.classList.remove("hidden");
-  registerFailed.classList.add("hidden");
-  setTimeout(() => {
-    window.location.replace("index.html");
-  }, 1000);
-} else {
-  registerFailed.querySelector("p").textContent = getFriendlyErrorMessage(
-    result.error
-  );
-  registerFailed.classList.remove("hidden");
-  registerSuccess.classList.add("hidden");
-}
+    registerSuccess.classList.remove("hidden");
+    registerFailed.classList.add("hidden");
+    setTimeout(() => {
+      window.location.replace("index.html");
+    }, 1000);
+  } else {
+    registerFailed.querySelector("p").textContent = getFriendlyErrorMessage(
+      result.error
+    );
+    registerFailed.classList.remove("hidden");
+    registerSuccess.classList.add("hidden");
+  }
+};
