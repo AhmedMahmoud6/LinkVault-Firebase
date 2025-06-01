@@ -45,6 +45,8 @@ continueWithGoogle.addEventListener("click", async (_) => {
     await setDoc(doc(db, "users", uid), { idCounter: 0 });
     setUserId(uid);
 
+    registerSuccess.querySelector("p").textContent =
+      "Access granted. Enjoy your session";
     registerSuccess.classList.remove("hidden");
     registerFailed.classList.add("hidden");
     setTimeout(() => {
