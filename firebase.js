@@ -70,7 +70,6 @@ export async function logout() {
 }
 
 export function loginWithGoogleRedirect() {
-  localStorage.setItem("expectRedirect", "true");
   signInWithRedirect(auth, googleProvider);
 }
 

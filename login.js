@@ -41,36 +41,29 @@ continueWithGoogle.addEventListener("click", async (_) => {
 });
 
 (async () => {
-  const expectRedirect = localStorage.getItem("expectRedirect");
+  setTimeout(async () => {
+    console.log("Checking Google redirect result...");
 
-  if (expectRedirect !== "true") {
-    console.log("No redirect expected — skipping getRedirectResult()");
-    return;
-  }
+    let result = await loginWithGoogle();
 
-  localStorage.removeItem("expectRedirect"); // clear flag after checking
+    console.log("Redirect result:", result);
 
-  console.log("Checking Google redirect result...");
+    if (result.success) {
+      const uid = result.user.uid;
+      await setDoc(doc(db, "users", uid), { idCounter: 0 });
+      setUserId(uid);
 
-  let result = await loginWithGoogle();
-
-  console.log("Redirect result:", result);
-
-  if (result.success) {
-    const uid = result.user.uid;
-    await setDoc(doc(db, "users", uid), { idCounter: 0 });
-    setUserId(uid);
-
-    loginSuccess.classList.remove("hidden");
-    loginFailed.classList.add("hidden");
-    setTimeout(() => {
-      window.location.replace("index.html");
-    }, 1000);
-  } else if (result.error) {
-    loginFailed.querySelector("p").textContent = getFriendlyErrorMessage(
-      result.error
-    );
-    loginFailed.classList.remove("hidden");
-    loginSuccess.classList.add("hidden");
-  }
+      loginSuccess.classList.remove("hidden");
+      loginFailed.classList.add("hidden");
+      setTimeout(() => {
+        window.location.replace("index.html");
+      }, 1000);
+    } else if (result.error) {
+      loginFailed.querySelector("p").textContent = getFriendlyErrorMessage(
+        result.error
+      );
+      loginFailed.classList.remove("hidden");
+      loginSuccess.classList.add("hidden");
+    }
+  }, 500);
 })();
