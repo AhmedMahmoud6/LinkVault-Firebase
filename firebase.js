@@ -76,6 +76,13 @@ export function loginWithGoogleRedirect() {
 export async function loginWithGoogle() {
   try {
     const result = await getRedirectResult(auth);
+
+    // If result is null, it means there's no redirect result (normal case)
+    if (!result) {
+      console.log("No redirect result found");
+      return { success: false, error: null };
+    }
+
     const user = result.user;
     console.log("Google User:", user);
     return { success: true, user };

@@ -59,7 +59,7 @@ continueWithGoogle.addEventListener("click", async (_) => {
     setTimeout(() => {
       window.location.replace("index.html");
     }, 1000);
-  } else {
+  } else if (result.error) {
     registerFailed.querySelector("p").textContent = getFriendlyErrorMessage(
       result.error
     );
