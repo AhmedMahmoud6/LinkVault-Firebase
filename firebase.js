@@ -2,8 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebas
 import {
   getAuth,
   GoogleAuthProvider,
-  signInWithRedirect,
-  getRedirectResult,
+  signInWithPopup,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
@@ -69,22 +68,11 @@ export async function logout() {
   }
 }
 
-export function loginWithGoogleRedirect() {
-  signInWithRedirect(auth, googleProvider);
-}
-
 export async function loginWithGoogle() {
   try {
-    const result = await getRedirectResult(auth);
-
-    // If result is null, it means there's no redirect result (normal case)
-    if (!result || !result.user) {
-      console.log("No redirect result found");
-      return { success: false, error: null };
-    }
-
+    const result = await signInWithPopup(auth, googleProvider);
     const user = result.user;
-    console.log("Google User:", user);
+    console.log("Google User:", user.email);
     return { success: true, user };
   } catch (error) {
     console.error("Google Login Error:", error.code, error.message);
