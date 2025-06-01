@@ -43,9 +43,11 @@ continueWithGoogle.addEventListener("click", async (_) => {
 });
 
 async () => {
+  console.log("Checking Google redirect result...");
+
   let result = await loginWithGoogle();
 
-  console.log(result);
+  console.log("Redirect result:", result);
 
   if (result.success) {
     const uid = result.user.uid;
