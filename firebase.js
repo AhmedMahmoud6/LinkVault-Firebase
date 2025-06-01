@@ -70,6 +70,7 @@ export async function logout() {
 }
 
 export function loginWithGoogleRedirect() {
+  localStorage.setItem("expectRedirect", "true");
   signInWithRedirect(auth, googleProvider);
 }
 
@@ -78,7 +79,7 @@ export async function loginWithGoogle() {
     const result = await getRedirectResult(auth);
 
     // If result is null, it means there's no redirect result (normal case)
-    if (!result) {
+    if (!result || !result.user) {
       console.log("No redirect result found");
       return { success: false, error: null };
     }

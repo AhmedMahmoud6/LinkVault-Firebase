@@ -41,6 +41,15 @@ continueWithGoogle.addEventListener("click", async (_) => {
 });
 
 (async () => {
+  const expectRedirect = localStorage.getItem("expectRedirect");
+
+  if (expectRedirect !== "true") {
+    console.log("No redirect expected — skipping getRedirectResult()");
+    return;
+  }
+
+  localStorage.removeItem("expectRedirect"); // clear flag after checking
+
   console.log("Checking Google redirect result...");
 
   let result = await loginWithGoogle();
