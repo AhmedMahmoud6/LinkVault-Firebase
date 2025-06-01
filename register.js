@@ -42,7 +42,7 @@ continueWithGoogle.addEventListener("click", async (_) => {
   loginWithGoogleRedirect();
 });
 
-async () => {
+(async () => {
   console.log("Checking Google redirect result...");
 
   let result = await loginWithGoogle();
@@ -66,4 +66,4 @@ async () => {
     registerFailed.classList.remove("hidden");
     registerSuccess.classList.add("hidden");
   }
-};
+})();

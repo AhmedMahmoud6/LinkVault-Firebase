@@ -5,6 +5,10 @@ import {
   loginWithGoogleRedirect,
   db,
 } from "./firebase.js";
+import {
+  doc,
+  setDoc,
+} from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 import { setUserId } from "./user.js";
 
 let emailInput = document.querySelector(".user-title");
@@ -36,7 +40,7 @@ continueWithGoogle.addEventListener("click", async (_) => {
   loginWithGoogleRedirect();
 });
 
-async () => {
+(async () => {
   console.log("Checking Google redirect result...");
 
   let result = await loginWithGoogle();
@@ -60,4 +64,4 @@ async () => {
     loginFailed.classList.remove("hidden");
     loginSuccess.classList.add("hidden");
   }
-};
+})();
